@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
-    // '/ktv-CDHA-1/' phải khớp chính xác với tên Repository của bạn
+    // Đảm bảo dấu gạch chéo ở đầu và cuối tên Repository
     base: '/ktv-CDHA-1/', 
     plugins: [react()],
     define: {
@@ -13,11 +13,12 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
+        // Giúp code tìm đúng thư mục src
         '@': path.resolve(__dirname, './src'),
       },
     },
     build: {
-      outDir: 'dist',
+      outDir: 'dist', // Thư mục đầu ra khi build
     }
   };
 });
