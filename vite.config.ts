@@ -3,22 +3,21 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
-    return {
-        base: 'ktv-CDHA-1/',
-      server: {
-        port: 3000,
-        host: '0.0.0.0',
+  const env = loadEnv(mode, process.cwd(), '');
+  return {
+    // '/ktv-CDHA-1/' phải khớp chính xác với tên Repository của bạn
+    base: '/ktv-CDHA-1/', 
+    plugins: [react()],
+    define: {
+      'process.env': env
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
       },
-      plugins: [react()],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, '.'),
-        }
-      }
-    };
+    },
+    build: {
+      outDir: 'dist',
+    }
+  };
 });
