@@ -7,8 +7,7 @@ const firebaseConfig = {
   projectId: "xq-ct-mri",
   storageBucket: "xq-ct-mri.firebasestorage.app",
   messagingSenderId: "978386756404",
-  appId: "1:978386756404:web:2dc045eb850f2836f4fb61",
-  measurementId: "G-H8PPVKFCTR"
+  appId: "1:978386756404:web:2dc045eb850f2836f4fb61"
 };
 
 const app = initializeApp(firebaseConfig);
