@@ -1,31 +1,65 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "firebase/firestore";
+import { 
+  getFirestore, collection, addDoc, query, where, 
+  limit, getDocs, writeBatch, doc, serverTimestamp 
+} from "firebase/firestore";
 
-// Cấu hình lấy chính xác từ image_11843e.png của bạn
 const firebaseConfig = {
   apiKey: "AIzaSyD-XGxySXdw-ZpN692u_qjjY3mFtWB1Jzo",
   authDomain: "xq-ct-mri.firebaseapp.com",
   projectId: "xq-ct-mri",
   storageBucket: "xq-ct-mri.firebasestorage.app",
   messagingSenderId: "978386756404",
-  appId: "1:978386756404:web:2dc045eb850f2836f4fb61",
-  measurementId: "G-H8PPVKFCTR"
+  appId: "1:978386756404:web:2dc045eb850f2836f4fb61"
 };
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Hàm lưu điểm số
-export const saveGameScore = async (name: string, score: number) => {
-  try {
-    await addDoc(collection(db, "leaderboard"), {
-      userName: name,
-      score: score,
-      timestamp: serverTimestamp(),
-      date: new Date().toLocaleDateString()
+// 1. Hàm XÓA sạch câu hỏi cũ và LƯU 50 câu mới
+export const refreshQuestions = async (questions: any[]) => {
+  const batch = writeBatch(db);
+  
+  // Xóa cũ
+  const oldDocs = await getDocs(collection(db, "Questions"));
+  oldDocs.forEach((d) => batch.delete(d.ref));
+
+  // Thêm mới
+  questions.forEach((q) => {
+    const newDocRef = doc(collection(db, "Questions"));
+    batch.set(newDocRef, {
+      ...q,
+      used: false,
+      dateUsed: null,
+      createdAt: serverTimestamp()
     });
-    console.log("Ghi điểm thành công!");
-  } catch (e) {
-    console.error("Lỗi ghi điểm: ", e);
+  });
+
+  await batch.commit();
+};
+
+// 2. Hàm lấy 10 câu cho ngày hôm nay (không trùng)
+export const getDailyQuestions = async () => {
+  const today = new Date().toISOString().split('T')[0];
+  
+  // Kiểm tra xem hôm nay đã có câu hỏi chưa
+  const qToday = query(collection(db, "Questions"), where("dateUsed", "==", today));
+  const snapToday = await getDocs(qToday);
+
+  if (!snapToday.empty) {
+    return snapToday.docs.map(d => ({ id: d.id, ...d.data() }));
   }
+
+  // Nếu chưa, lấy 10 câu mới chưa dùng
+  const qNew = query(collection(db, "Questions"), where("used", "==", false), limit(10));
+  const snapNew = await getDocs(qNew);
+  
+  const batch = writeBatch(db);
+  const questions = snapNew.docs.map(d => {
+    batch.update(d.ref, { used: true, dateUsed: today });
+    return { id: d.id, ...d.data() };
+  });
+
+  await batch.commit();
+  return questions;
 };
