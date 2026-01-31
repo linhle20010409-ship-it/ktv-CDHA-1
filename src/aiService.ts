@@ -12,14 +12,14 @@ export const readPDF = async (file: File): Promise<string> => {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
-    text += content.items.map((item: any) => item.str).join(" ") + "\n";
+    text += content.items.map((item: any) => (item as any).str).join(" ") + "\n";
   }
   return text;
 };
 
 export const generateQuiz = async (text: string) => {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-  const prompt = `Dựa vào tài liệu này: ${text}. Hãy soạn 50 câu hỏi trắc nghiệm kiến thức. Trả về JSON mảng: [{"question": "...", "options": ["A", "B", "C", "D"], "correctAnswer": 0}]`;
+  const prompt = `Dựa vào tài liệu: ${text}. Soạn 50 câu hỏi trắc nghiệm kiến thức. Trả về JSON array: [{"question": "...", "options": ["A", "B", "C", "D"], "correctAnswer": 0}]`;
   const result = await model.generateContent(prompt);
   const response = result.response.text().replace(/```json|```/g, "");
   return JSON.parse(response);
