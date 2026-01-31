@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   getDailyQuestions, 
   saveGameScore, 
-  getLeaderboard, // Đã viết hoa đúng chuẩn
+  getLeaderboard, 
   refreshQuestions 
 } from './firebase';
 import { readPDF, generateQuiz } from './aiService';
@@ -103,7 +103,7 @@ function App() {
         <div className="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
           <div>
             <h1 className="text-2xl font-black text-blue-600 tracking-tight">
-              KTV-CDHA Quiz (BẢN SỬA LỖI V3)
+              KTV-CDHA Quiz (FINAL FIX)
             </h1>
             <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Hệ thống ôn luyện AI</p>
           </div>
