@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp } from "firebase/firestore";
 
-// Cấu hình lấy từ image_11843e.png của bạn
+// Cấu hình lấy chính xác từ image_11843e.png của bạn
 const firebaseConfig = {
   apiKey: "AIzaSyD-XGxySXdw-ZpN692u_qjjY3mFtWB1Jzo",
   authDomain: "xq-ct-mri.firebaseapp.com",
@@ -15,33 +15,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-/** * Hàm lưu điểm số vào Firestore
- * Bạn có thể gọi hàm này trong Game khi người chơi kết thúc lượt
- */
+// Hàm lưu điểm số
 export const saveGameScore = async (name: string, score: number) => {
   try {
-    const docRef = await addDoc(collection(db, "leaderboard"), {
+    await addDoc(collection(db, "leaderboard"), {
       userName: name,
       score: score,
       timestamp: serverTimestamp(),
       date: new Date().toLocaleDateString()
     });
-    console.log("Ghi điểm thành công với ID: ", docRef.id);
+    console.log("Ghi điểm thành công!");
   } catch (e) {
-    console.error("Lỗi khi lưu điểm: ", e);
-  }
-};
-
-/**
- * Hàm lấy danh sách Top 10 điểm cao nhất
- */
-export const getLeaderboard = async () => {
-  try {
-    const q = query(collection(db, "leaderboard"), orderBy("score", "desc"), limit(10));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => doc.data());
-  } catch (e) {
-    console.error("Lỗi khi lấy bảng xếp hạng: ", e);
-    return [];
+    console.error("Lỗi ghi điểm: ", e);
   }
 };
