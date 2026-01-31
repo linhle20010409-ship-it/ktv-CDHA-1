@@ -4,7 +4,7 @@ import {
   limit, getDocs, writeBatch, doc, serverTimestamp 
 } from "firebase/firestore";
 
-// Cấu hình từ Project Settings của dự án xq-ct-mri
+// Cấu hình chuẩn từ dự án xq-ct-mri của bạn
 const firebaseConfig = {
   apiKey: "AIzaSyD-XGxySXdw-ZpN692u_qjjY3mFtWB1Jzo",
   authDomain: "xq-ct-mri.firebaseapp.com",
@@ -18,7 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-// Hàm Xóa cũ và Lưu 50 câu hỏi mới
 export const refreshQuestions = async (questions: any[]) => {
   const batch = writeBatch(db);
   const oldDocs = await getDocs(collection(db, "Questions"));
@@ -36,7 +35,6 @@ export const refreshQuestions = async (questions: any[]) => {
   await batch.commit();
 };
 
-// Hàm lấy 10 câu hỏi theo ngày (không trùng)
 export const getDailyQuestions = async () => {
   const today = new Date().toISOString().split('T')[0];
   const qToday = query(collection(db, "Questions"), where("dateUsed", "==", today));
@@ -55,7 +53,6 @@ export const getDailyQuestions = async () => {
   return questions;
 };
 
-// Hàm lưu điểm số người chơi
 export const saveGameScore = async (name: string, score: number) => {
   await addDoc(collection(db, "leaderboard"), {
     userName: name,
