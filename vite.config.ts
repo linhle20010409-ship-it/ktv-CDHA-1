@@ -1,7 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  base: '/ktv-CDHA-1/', // Sửa lỗi 404 cho GitHub Pages
   plugins: [react()],
+  // DÒNG QUAN TRỌNG NHẤT: Khai báo tên Repository của bạn
+  // Dựa trên link web của bạn là .../ktv-CDHA-1/
+  base: "/ktv-CDHA-1/",
+  build: {
+    outDir: 'dist',
+  },
 });
