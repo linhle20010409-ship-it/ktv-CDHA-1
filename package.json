@@ -1,5 +1,5 @@
 {
-  "name": "radrush-ai-quiz",
+  "name": "ktv-cdha-ai-quiz",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -11,6 +11,8 @@
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "firebase": "^10.7.1",
+    "framer-motion": "^10.16.16",
+    "lucide-react": "^0.294.0",
     "pdfjs-dist": "^3.11.174",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
