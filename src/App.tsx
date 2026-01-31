@@ -46,7 +46,9 @@ function App() {
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border">
-          <h1 className="text-xl font-bold text-blue-600">KTV-CDHA MRI Quiz</h1>
+          <h1 className="text-2xl font-black text-blue-600 tracking-tight">
+  KTV-CDHA Quiz (BẢN MỚI V1)
+</h1>>
           <button onClick={() => setShowAdmin(!showAdmin)} className="p-2 bg-slate-100 rounded-lg"><Upload size={18} /></button>
         </div>
 
